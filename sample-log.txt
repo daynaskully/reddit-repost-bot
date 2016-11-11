@@ -1,0 +1,42 @@
+ Retrieving mods... ips)
+11/09/2016 02:26:34 - Action: Report 559tu9 (66.6666666667%). Original: 5aoi8t. Threshold: 60.0
+11/09/2016 02:26:41 - Action: Report 55cch5 (68.4210526316%). Original: 55eq0v. Threshold: 60.0
+11/09/2016 02:26:52 - Action: Report 55g1wm (60.2409638554%). Original: 58iuml. Threshold: 60.0
+11/09/2016 02:26:57 - Action: Remove 55hnzf (99.4594594595%). Original: 59fozx. Threshold: 95.0
+11/09/2016 02:27:03 - Action: Report 55iduy (60.3174603175%). Original: 55p0f0. Threshold: 60.0
+11/09/2016 02:27:06 - Action: Remove 55je00 (100.0%). Original: 5adsk3. Threshold: 95.0
+11/09/2016 02:27:11 - Action: Report 55kbow (88.8888888889%). Original: 572514. Threshold: 60.0
+11/09/2016 02:27:19 - Action: Remove 55nid8 (98.7804878049%). Original: 56ydk2. Threshold: 95.0
+11/09/2016 02:27:20 - Action: Report 55nnpn (60.1769911504%). Original: 566878. Threshold: 60.0
+11/09/2016 02:27:21 - Action: Remove 55nnwt (100.0%). Original: 58q26v. Threshold: 95.0
+11/09/2016 02:27:40 - Action: Report 55tf0e (60.1398601399%). Original: 560eb4. Threshold: 60.0
+11/09/2016 02:27:50 - Action: Report 55vkrm (61.9047619048%). Original: 560dvu. Threshold: 60.0
+11/09/2016 02:27:53 - Action: Report 55wm3z (79.5180722892%). Original: 56qezf. Threshold: 60.0
+11/09/2016 02:27:53 - Action: Report 55wuwn (65.625%). Original: 59djbz. Threshold: 60.0
+11/09/2016 02:28:02 - Action: Remove 55zwwq (100.0%). Original: 5axpc5. Threshold: 95.0
+11/09/2016 02:28:19 - Action: Remove 563krt (100.0%). Original: 56sz8g. Threshold: 95.0
+11/09/2016 02:28:28 - Action: Remove 565kbl (100.0%). Original: 56663z. Threshold: 95.0
+11/09/2016 02:28:36 - Action: Report 566c3e (61.3333333333%). Original: 57x4y1. Threshold: 60.0
+11/09/2016 02:28:45 - Action: Report 569uy4 (70.0%). Original: 57ahra. Threshold: 60.0
+11/09/2016 02:28:51 - Action: Remove 56c00f (100.0%). Original: 5763w9. Threshold: 95.0
+11/09/2016 02:28:53 - Action: Report 56cmr0 (60.0%). Original: 5733ma. Threshold: 60.0
+11/09/2016 02:29:08 - Action: Report 56i4k0 (90.1639344262%). Original: 58quzq. Threshold: 60.0
+11/09/2016 02:29:21 - Ignoring report/remove 56noi6. Reason: Three Month Rule. Original: 4iwuqh Do nothing. 64.5161290323
+11/09/2016 02:29:40 - Action: Remove 56rggd (97.0760233918%). Original: 589z6w. Threshold: 95.0
+11/09/2016 02:29:49 - Action: Report 56tlzv (65.2173913043%). Original: 586y2g. Threshold: 60.0
+11/09/2016 02:29:51 - Ignoring report/remove 56u3zb.Reason: Posted by a moderator (kuhnie). Original: 5a7o40
+11/09/2016 02:29:59 - Action: Report 56vtvy (60.2739726027%). Original: 574a03. Threshold: 60.0
+11/09/2016 02:30:15 - Action: Report 56ydpy (60.7843137255%). Original: 5aq315. Threshold: 60.0
+11/09/2016 02:30:23 - Action: Report 570a41 (65.4205607477%). Original: 59139o. Threshold: 60.0
+11/09/2016 02:31:28 - Action: Report 57i6px (86.1111111111%). Original: 5bn3of. Threshold: 60.0
+11/09/2016 02:31:29 - Action: Report 57iv9n (61.2903225806%). Original: 57p9g9. Threshold: 60.0
+11/09/2016 02:31:46 - Action: Report 57p9g9 (60.6060606061%). Original: 5a7o40. Threshold: 60.0
+11/09/2016 02:32:35 - Action: Report 584c2g (88.5245901639%). Original: 58quzq. Threshold: 60.0
+11/09/2016 02:32:42 - Action: Report 586nf5 (66.6666666667%). Original: 58mtrl. Threshold: 60.0
+11/09/2016 02:32:52 - Action: Report 58arwk (66.6666666667%). Original: 5agenl. Threshold: 60.0
+11/09/2016 02:33:57 - Action: Report 58uo51 (60.0%). Original: 5a9uy9. Threshold: 60.0
+11/09/2016 02:34:28 - Action: Remove 593wwl (98.2035928144%). Original: 59s8yn. Threshold: 95.0
+11/09/2016 02:34:52 - Action: Remove 59cqys (100.0%). Original: 5a69e9. Threshold: 95.0
+11/09/2016 02:34:55 - Action: Remove 59e0r1 (100.0%). Original: 5ankfn. Threshold: 95.0
+11/09/2016 02:36:12 - Action: Remove 5a1y4t (100.0%). Original: 5a8j9h. Threshold: 95.0
+11/09/2016 02:36:39 - Ignoring report/remove 5a7o40.Reason: Posted by a moderator (kuhnie). Original: 56u3zb
