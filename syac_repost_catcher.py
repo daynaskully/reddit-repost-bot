@@ -1,3 +1,5 @@
+# #!/usr/bin/env python
+
 import re
 import praw
 import datetime
@@ -5,6 +7,7 @@ import threading
 import Queue
 import time
 import sys
+import os
 
 from difflib import SequenceMatcher
 from prawoauth2 import PrawOAuth2Mini
@@ -27,14 +30,19 @@ DO_REPORT = 1
 DO_REMOVE = 2
 DO_IGNORE = 3
 
+START_WITH_POST_COUNT = 1
 ALLOW_REPOSTS_THREE_MONTH = 1
-ENABLE_SLACK_INTEGRATION = 1
 
 # Shared variables must exist in all threads
 REPORT_THRESHOLD = 0.60
 REMOVE_THRESHOLD = 0.95
 
-SUBREDDIT = 'AskReddit'
+SUBREDDIT = 'savedyouaclick'
+SLACK_CHANNEL = 'rss_feed'
+
+ENABLE_SLACK_INTEGRATION = 1
+
+
 
 class QueuedSlackCommand():
     def __init__(self,type, **kwargs):
@@ -60,14 +68,14 @@ class SyacRepostBot():
         self.thread.start()
 
         # Inform slack
-        slackMessage = QueuedSlackCommand('send_message',channel='repost_notifications',message='Started analyzing new posts for */r/{}*. Report Threshold: {}. Remove Threshold: {}'.
-            format(SUBREDDIT,self.ReportThreshold,self.RemoveThreshold))
-        self.sharedQueue.put(slackMessage)
+        # slackMessage = QueuedSlackCommand('send_message',channel=SLACK_CHANNEL,message='Started analyzing new posts for */r/{}*. Report Threshold: {}. Remove Threshold: {}'.
+        #     format(SUBREDDIT,self.ReportThreshold,self.RemoveThreshold))
+        # self.sharedQueue.put(slackMessage)
     
     # Main Loop
     # For every new submission, check if it's a repost
     def MainLoop(self,sharedQueue):
-        for post in praw.helpers.submission_stream(reddit_client, self.Sub,20):
+        for post in praw.helpers.submission_stream(reddit_client, self.Sub,START_WITH_POST_COUNT):
             RemoveOrReport = False
 
             for top in self.TopPosts:
@@ -87,6 +95,8 @@ class SyacRepostBot():
                 self.NewPosts.append(post)
 
             self.Log("New Submission Analyzed {} - {} - Report: {} Remove: {}".format(post.id,str(RemoveOrReport),self.ReportThreshold,self.RemoveThreshold))
+
+            
     
 
     # The actual logic of reporting/removing
@@ -126,7 +136,7 @@ class SyacRepostBot():
                 ,topPost.title[:50].encode('utf-8')
                 )
 
-            self.Report(newPost, reason)
+            self.Report(newPost, reason,ratio)
 
         # Remove if necessary
         elif result == DO_REMOVE:
@@ -138,6 +148,9 @@ class SyacRepostBot():
                 ,self.utility.GetPostLink(SUBREDDIT,topPost)
                 ,topPost.title[:50]
                 )
+
+            postStr = self.GetRemovePost(newPost,topPost)
+            newPost.add_comment(postStr)
 
             
             self.Remove(newPost,reason)
@@ -197,15 +210,24 @@ class SyacRepostBot():
 
     
     # Report the post for repost
-    def Report(self,post,reason):
-        #post.report(reason=reason)
+    def Report(self,post,reason,ratio):
+        post.report(reason="Repost by {:.4}%".format(ratio))
 
         self.Log("{}".format(reason),True)
     
     # Remove the post
     def Remove(self,post,reason):
-        #post.remove()
-        self.utility.Log("{}".format(reason),False)
+        post.remove()
+        self.Log("{}".format(reason),True)
+
+    def GetRemovePost(self,post,originalPost):
+        string = '''Hey /u/{}, unfortunately your article or a similar article was already posted within the last three months, or was already submitted and is in the top 100 posts on this sub. 
+        
+* [{}]({})
+        
+*I am a bot, and this action was performed automatically. Please contact the [moderators of this subreddit](https://www.reddit.com/message/compose?to=%2Fr%2Fsavedyouaclick&subject=&message=https%3A%2F%2Fwww.reddit.com%2Fr%2Fsavedyouaclick%2F) if you have any questions or concerns.*
+        '''.format(post.author,originalPost.title,self.utility.GetPostLink(SUBREDDIT,originalPost))
+        return string
 
     
     
@@ -217,12 +239,12 @@ class SyacRepostBot():
         formatted = now.strftime("%m/%d/%Y %H:%M:%S")
         logwithdate = "{} - {}".format(formatted,log)
 
-        if ENABLE_SLACK_INTEGRATION == 1 and toSlack:
-            slackMessage = QueuedSlackCommand('send_message',channel='repost_notifications',message=log)
+        if toSlack:
+            slackMessage = QueuedSlackCommand('send_message',channel=SLACK_CHANNEL,message=log)
             self.sharedQueue.put(slackMessage)
 
         
-        self.utility.Log("Slack- {} - {}".format(str(toSlack),logwithdate))
+        #self.utility.Log("Slack- {} - {}".format(str(toSlack),logwithdate))
 
 
 class SlackIntegration():
@@ -262,7 +284,7 @@ class SlackIntegration():
 
     def HandleBotCommand(self,channel,command):
         if command == 'help':
-            message = 'Available commands: \n *!syac status* : Return current thresholds. \n *!syac reportThreshold [number]*: Set the report threshold [0,1] \n *!syac removeThreshold [number]*: Set the remove threshold [0,1]'
+            message = '```Available commands: \n *!syac status* : Return current thresholds. \n *!syac reportThreshold [number]*: Set the report threshold [0,1] \n *!syac removeThreshold [number]*: Set the remove threshold [0,1] \n *!syac exit*: Shut down the bot.```'
             self.SendMessage(channel,message)
 
         if command == 'status':
@@ -305,6 +327,13 @@ class SlackIntegration():
             except:
                 self.SendMessage(channel,"Threshold is invalid.")
 
+
+        if command == 'exit':
+            message = '*Bye* :cry:'
+            self.SendMessage(channel,message)
+
+            os._exit(0)
+
         
 
 
@@ -327,17 +356,24 @@ class SlackIntegration():
 
 def main():
     threadSafeQueue = Queue.Queue()
+    oauth_helper.refresh()
 
-    SyacBot = SyacRepostBot(threadSafeQueue)
-    Slack = SlackIntegration(threadSafeQueue,SyacBot)
+    try:
+        oauth_helper.refresh()
+
+        SyacBot = SyacRepostBot(threadSafeQueue)
+
+        if ENABLE_SLACK_INTEGRATION:
+            Slack = SlackIntegration(threadSafeQueue,SyacBot)
 
 
-    SyacBot.JoinThread()
-    Slack.JoinThread()
+        SyacBot.JoinThread()
 
-    # except:
-    #     e = sys.exc_info()[0]
-    #     print e
+        if ENABLE_SLACK_INTEGRATION:
+            Slack.JoinThread()
+    except:
+        e = sys.exc_info()[0]
+        print e
 
 
 if __name__ == '__main__':

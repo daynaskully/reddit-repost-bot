@@ -5,7 +5,7 @@ from settings import ARKENTHERA_BOT_TOKEN
 BOT_NAME = 'repost_notifier'
 
 
-slack_client = SlackClient()
+slack_client = SlackClient(ARKENTHERA_BOT_TOKEN)
 
 
 if __name__ == "__main__":
@@ -13,7 +13,7 @@ if __name__ == "__main__":
     if api_call.get('ok'):
         # retrieve all users so we can find our bot
         users = api_call.get('members')
-        print users
+        
         for user in users:
             if 'name' in user and user.get('name') == BOT_NAME:
                 print("Bot ID for '" + user['name'] + "' is " + user.get('id'))
